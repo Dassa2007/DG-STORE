@@ -3,117 +3,483 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>DG MODZ STORE | Ultimate Mod Hub</title>
+    <title>DG BUSINESS STORE ⚡ PRO | Social Boost & V2Ray VPN</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --bg: #f5f5f7;
+            --card: #ffffff;
+            --text: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --accent: #0071e3;
+            --border: #d2d2d7;
+            --shadow: rgba(0,0,0,0.08);
+            --success: #34c759;
+            --warning: #ff9f0a;
+        }
+        [data-theme="dark"] {
+            --bg: #000000;
+            --card: #1c1c1e;
+            --text: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --accent: #0a84ff;
+            --border: #38383a;
+            --shadow: rgba(255,255,255,0.08);
+            --success: #30d158;
+            --warning: #ff9f0a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; }
+
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 4px solid var(--border);
+            border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        header {
+            background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 20px;
+            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, var(--accent), #5856d6); -webkit-background-clip: text; background-clip: text; color: transparent; animation: slideDown 0.5s ease; }
+        .header-right { display: flex; gap: 12px; align-items: center; }
+        .theme-btn,.menu-btn {
+            background: var(--bg); border: 1px solid var(--border); padding: 8px 12px;
+            border-radius: 12px; cursor: pointer; color: var(--text); transition: all 0.2s;
+        }
+        .theme-btn:hover,.menu-btn:hover { transform: scale(1.05); background: var(--accent); color: white; }
+
+        #sidebar {
+            position: fixed; top: 0; right: -280px; width: 280px; height: 100%;
+            background: var(--card); border-left: 1px solid var(--border); transition: 0.3s; z-index: 200; padding: 20px;
+        }
+        #sidebar.active { right: 0; }
+        #sidebar ul { list-style: none; margin-top: 40px; }
+        #sidebar li { margin: 8px 0; animation: slideLeft 0.3s ease forwards; opacity: 0; }
+        #sidebar.active li:nth-child(1) { animation-delay: 0.1s; }
+        #sidebar.active li:nth-child(2) { animation-delay: 0.15s; }
+        #sidebar.active li:nth-child(3) { animation-delay: 0.2s; }
+        #sidebar.active li:nth-child(4) { animation-delay: 0.25s; }
+        #sidebar.active li:nth-child(5) { animation-delay: 0.3s; }
+        #sidebar a {
+            display: block; padding: 12px; color: var(--text); text-decoration: none;
+            border-radius: 12px; font-weight: 500; transition: all 0.2s;
+        }
+        #sidebar a:hover, #sidebar a.active { background: var(--bg); color: var(--accent); transform: translateX(-5px); }
+        .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); float: left; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 150; }
+        .overlay.active { display: block; }
+
+        main { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .page { display: none; animation: fadeInUp 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideLeft { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+        h1 { margin-bottom: 16px; font-size: 32px; font-weight: 800; background: linear-gradient(135deg, var(--accent), #5856d6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        h2 { margin: 24px 0 12px; font-size: 24px; font-weight: 700; color: var(--accent); }
+        h3 { font-weight: 600; margin-bottom: 8px; }
+        p { line-height: 1.7; color: var(--text-secondary); margin-bottom: 12px; }
+
+        .carousel { position: relative; width: 100%; height: 280px; border-radius: 24px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 8px 24px var(--shadow); }
+        .carousel img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: opacity 1s ease; }
+        .carousel img.active { opacity: 1; }
+
+        .card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 24px;
+            padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 16px var(--shadow);
+            transition: all 0.3s ease; animation: fadeInUp 0.5s ease;
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px var(--shadow); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+
+        .operator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .operator-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 20px;
+            transition: all 0.25s;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+        .operator-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+        .operator-title {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid var(--accent);
+        }
+        .operator-title img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .package-list {
+            list-style: none;
+        }
+        .package-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        .package-name { font-weight: 500; }
+        .package-price {
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--bg);
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 13px;
+        }
+        .gb-card {
+            background: linear-gradient(145deg, var(--accent), #1e3c72);
+            color: white;
+            border-radius: 24px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .gb-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .gb-option {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            border-radius: 20px;
+            padding: 12px 20px;
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .test-note {
+            background: var(--warning);
+            color: #1d1d1f;
+            padding: 12px;
+            border-radius: 16px;
+            margin-top: 16px;
+            font-weight: 500;
+        }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+        .form-group input,.form-group select {
+            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 16px;
+            background: var(--bg); color: var(--text); font-size: 15px; transition: all 0.2s;
+        }
+        .form-group input:focus,.form-group select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.1); }
+        
+        .btn {
+            background: var(--accent); color: white; border: none; padding: 12px 28px;
+            border-radius: 40px; cursor: pointer; font-weight: 600; font-size: 15px;
+            transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,113,227,0.3); }
+        .btn:active { transform: translateY(0); }
+        .btn-success { background: var(--success); }
+        
+        .wp-btn {
+            display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: white;
+            padding: 12px 28px; border-radius: 40px; text-decoration: none; font-weight: 600; margin-top: 16px;
+            transition: all 0.2s;
+        }
+        .wp-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37,211,102,0.3); }
+        
+        .payment-card { background: linear-gradient(135deg, var(--accent), #5856d6); color: white; }
+        .payment-item {
+            background: rgba(255,255,255,0.15); padding: 14px; border-radius: 16px;
+            margin: 12px 0; display: flex; justify-content: space-between; align-items: center;
+        }
+        .copy-btn {
+            background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 16px;
+            border-radius: 40px; cursor: pointer; font-size: 13px; transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.3); }
+        .payment-logo { width: 40px; height: 40px; object-fit: contain; background: white; border-radius: 12px; padding: 6px; }
+        .payment-warning {
+            background: rgba(255,204,0,0.2); border-left: 4px solid #ffcc00;
+            padding: 14px; border-radius: 16px; margin-top: 16px; font-size: 14px;
+        }
+        .comment-box textarea {
+            width: 100%; min-height: 90px; padding: 12px; border: 1px solid var(--border);
+            border-radius: 16px; background: var(--bg); color: var(--text); margin-bottom: 12px;
+        }
+        .comment { border-bottom: 1px solid var(--border); padding: 18px 0; animation: fadeInUp 0.3s; }
+        .comment-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .comment-header img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+        .comment-actions { display: flex; gap: 20px; margin-top: 10px; }
+        .comment-actions button { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 13px; font-weight: 500; }
+
+        .boost-feature { font-size: 12px; color: var(--text-secondary); margin-top: 6px; display: block; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 10px; }
+        .price-tag { background: var(--bg); padding: 6px 12px; border-radius: 40px; font-weight: 700; font-size: 14px; color: var(--accent); border: 1px solid var(--border); }
+        .quantity-selector { display: flex; align-items: center; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
+        .quantity-selector input { width: 140px; padding: 10px; border-radius: 40px; text-align: center; }
+        .dynamic-price { font-size: 28px; font-weight: 800; color: var(--accent); margin: 10px 0; }
+        hr { margin: 20px 0; border-color: var(--border); }
+    </style>
 </head>
 <body>
-    <div class="top-bar">
-    <div class="logo-area">
-        <img src="https://files.catbox.moe/q7bhx1.jpg" alt="Logo">
-        <h2>DG MODZ STORE</h2>
-    </div>
-    
-    <div class="controls">
-        <button id="darkmodeToggle" class="icon-btn"><i class="fas fa-moon"></i></button>
-        <button id="musicToggle" class="icon-btn"><i class="fas fa-music"></i> <span id="musicStatus" style="font-size: 0.7rem;">OFF</span></button>
-        <button class="menu-toggle" id="menuToggleBtn"><i class="fas fa-bars"></i></button>
-    </div>
-
-    <div class="nav-menu" id="mainNav">
-        <button class="nav-btn" id="menuLoginBtn" style="display:none;"><i class="fas fa-key"></i> LOGIN</button>
-        <button class="nav-btn" data-page="store">📦 STORE</button>
-        <button class="nav-btn" data-page="comments">💬 COMMENT</button>
-        <button class="nav-btn" data-page="creator">👾 CREATOR</button>
-        <button class="nav-btn" data-page="account">👤 ACCOUNT</button>
-    </div>
-</div>
-
-<div class="page-container">
-    <div id="storePage" class="page active-page">
-        <input type="text" id="search" placeholder="🔍 Search mods... (WhatsApp, TikTok, etc)">
-        <div id="appList" class="app-grid"></div>
-    </div>
-
-    <div id="commentsPage" class="page">
-        <div class="comment-slideshow">
-            <img class="slides" src="https://www.image2url.com/r2/default/images/1776019187583-ab10f77e-a23e-4194-987b-ca8cabc20ab8.png">
-            <img class="slides" src="https://www.image2url.com/r2/default/images/1776019047202-1e513dd3-2f8b-44eb-8f45-9527d5db22a3.png">
-            <img class="slides" src="https://i.ibb.co/h18J593W/c153b2a8bc0442a5dde016c38c988122.jpg">
+    <div id="loader"><div class="spinner"></div></div>
+    <div class="overlay" id="overlay"></div>
+    <nav id="sidebar">
+        <button class="close-btn" onclick="toggleMenu()">×</button>
+        <ul>
+            <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
+            <li><a href="#" onclick="showPage('boost')" class="nav-link">Social Boost</a></li>
+            <li><a href="#" onclick="showPage('v2ray')" class="nav-link">V2Ray VPN</a></li>
+            <li><a href="#" onclick="showPage('webdesign')" class="nav-link">Web Design</a></li>
+            <li><a href="#" onclick="showPage('about')" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+    <header>
+        <div class="logo"><i class="fas fa-bolt"></i> DG BUSINESS STORE PRO</div>
+        <div class="header-right">
+            <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+            <div id="userInfo"></div>
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
         </div>
+    </header>
+    <main>
+        <!-- HOME -->
+        <section id="home" class="page active">
+            <div class="carousel"><img src="https://picsum.photos/800/400?random=1" class="active"><img src="https://picsum.photos/800/400?random=2"><img src="https://picsum.photos/800/400?random=3"><img src="https://picsum.photos/800/400?random=4"></div>
+            <div class="card"><h1>Welcome to DG BUSINESS STORE ⚡ PRO</h1><p>Your one-stop solution for Social Media Boosting, Professional Website Design, and High‑Speed V2Ray VPN Data. Reliable service, fair pricing — get started today.</p></div>
+            <div class="card"><h2>Community Comments</h2><div id="google-signin-btn"></div><div class="comment-box" id="commentBox" style="display:none;"><textarea id="commentInput" placeholder="Write your comment here..."></textarea><button class="btn" onclick="postComment()">Post Comment</button></div><div id="commentsList"></div></div>
+        </section>
 
-        <div id="commentsLoginGate"></div>
-        <div id="commentSectionWrapper" style="display: none;">
-            <div class="comment-form-area">
-                <textarea id="newCommentInput" rows="2" style="width:100%; background:var(--input-bg); border:1px solid var(--border-color); border-radius:15px; padding:10px; color:white; font-weight: 600;" placeholder="Express your thoughts..."></textarea>
-                <button id="submitCommentBtn" style="background:var(--accent); border:none; padding:10px 20px; border-radius:40px; color:white; margin-top:10px; cursor:pointer; font-weight: 800;">Post Comment</button>
-            </div>
-            <div id="commentsListContainer"></div>
-        </div>
-    </div>
+        <!-- SOCIAL BOOST PAGE: Quantity 100-100,000, linear pricing -->
+        <section id="boost" class="page">
+            <div class="card"><h1><i class="fas fa-chart-line"></i> Social Media Boosting</h1><p>Premium quality engagement — Real accounts, Lifetime guarantee. Select service & quantity (100 to 100,000). Price changes automatically based on quantity.</p></div>
+            <div class="card"><h2>▶️ YouTube Services</h2><div class="operator-grid"><div class="operator-card"><div class="operator-title"><i class="fab fa-youtube"></i> YouTube Video Likes</div><div class="boost-feature">⚡ Speed: 10k/Day | 🛡️ Nondrop | Lifetime Guarantee</div><div class="price-row"><span class="price-tag">Per Like: Rs 0.95</span><span class="price-tag">1K Likes → Rs 950</span></div></div><div class="operator-card"><div class="operator-title"><i class="fas fa-eye"></i> YouTube Views</div><div class="boost-feature">💯 100% Nondrop | Speed: 5k/Day | Lifetime</div><div class="price-row"><span class="price-tag">Per View: Rs 0.86</span><span class="price-tag">1K Views → Rs 860</span></div></div></div></div>
+            <div class="card"><h2>📘 Facebook Boosts</h2><div class="operator-grid"><div class="operator-card"><div class="operator-title"><i class="fab fa-facebook"></i> Page Followers</div><div class="boost-feature">♻️ Non-Drop | Refill Lifetime | Speed: 1M/Day</div><div class="price-row"><span class="price-tag">Per Follow: Rs 0.95</span><span class="price-tag">1K Follow → Rs 950</span></div></div><div class="operator-card"><div class="operator-title"><i class="fas fa-play-circle"></i> Reel Views</div><div class="boost-feature">📉 No Drop | Lifetime Refill | Speed: 500K/Day</div><div class="price-row"><span class="price-tag">Per View: Rs 0.70</span><span class="price-tag">1K Views → Rs 700</span></div></div><div class="operator-card"><div class="operator-title"><i class="fas fa-thumbs-up"></i> Post Likes</div><div class="boost-feature">🔄 Lifetime Refill | 100% Non-Drop</div><div class="price-row"><span class="price-tag">Per Like: Rs 0.95</span><span class="price-tag">1K Likes → Rs 950</span></div></div></div></div>
+            <div class="card"><h2>🎵 TikTok Power Packages</h2><div class="operator-grid"><div class="operator-card"><div class="operator-title"><i class="fab fa-tiktok"></i> TikTok Likes (Premium)</div><div class="boost-feature">⚡ Speed: 30K/Day | Lifetime</div><div class="price-row"><span class="price-tag">Per Like: Rs 0.40</span><span class="price-tag">1K → Rs 400</span></div></div><div class="operator-card"><div class="operator-title"><i class="fab fa-tiktok"></i> TikTok Likes (Fast Server)</div><div class="boost-feature">🚀 100K-500K/Day | Non-Drop</div><div class="price-row"><span class="price-tag">Per Like: Rs 0.35</span><span class="price-tag">1K → Rs 350</span></div></div><div class="operator-card"><div class="operator-title"><i class="fab fa-tiktok"></i> TikTok Views</div><div class="boost-feature">🎯 Real + High Quality | Speed: 30M/Day</div><div class="price-row"><span class="price-tag">Per View: Rs 0.10</span><span class="price-tag">1K Views → Rs 100</span></div></div><div class="operator-card"><div class="operator-title"><i class="fas fa-users"></i> TikTok Followers (Real)</div><div class="boost-feature">✅ Non-Drop | Real accounts | Speed: 3k/Day</div><div class="price-row"><span class="price-tag">Per Follow: Rs 1.40</span><span class="price-tag">1K Follow → Rs 1400</span></div></div><div class="operator-card"><div class="operator-title"><i class="fas fa-gem"></i> TikTok Followers (High Quality)</div><div class="boost-feature">💎 Premium | Speed: 50K/Day | Instant</div><div class="price-row"><span class="price-tag">Per Follow: Rs 2.30</span><span class="price-tag">1K → Rs 2300</span></div></div></div></div>
 
-    <div id="creatorPage" class="page">
-        <div class="info-card" style="text-align: center;">
-            <div class="creator-video-container" onclick="toggleVideoSound(this)">
-                <video id="creatorVid" src="https://files.catbox.moe/dazxqu.mp4" autoplay loop playsinline></video>
-                <p style="font-size: 0.6rem; color: var(--accent);">Click for sound 🔊</p>
+            <!-- Dynamic Order Form with Quantity 100-100000 & linear price -->
+            <div class="card">
+                <h2><i class="fas fa-shopping-cart"></i> Custom Order (Quantity 100 - 100,000)</h2>
+                <form id="boostOrderForm" onsubmit="submitBoostOrderDynamic(event)">
+                    <div class="form-group"><label>Full Name *</label><input type="text" id="boostName" required placeholder="e.g., Sanduni Perera"></div>
+                    <div class="form-group"><label>Select Service Type *</label><select id="boostServiceType" required onchange="updatePricePreview()">
+                        <option value="">-- Choose Service --</option>
+                        <option value="youtube_likes" data-price-per-k="950">🔥 YouTube Video Likes (per 1K: Rs 950)</option>
+                        <option value="youtube_views" data-price-per-k="860">📺 YouTube Views (per 1K: Rs 860)</option>
+                        <option value="fb_followers" data-price-per-k="950">👥 Facebook Page Followers (per 1K: Rs 950)</option>
+                        <option value="fb_reel_views" data-price-per-k="700">🎬 Facebook Reel Views (per 1K: Rs 700)</option>
+                        <option value="fb_post_likes" data-price-per-k="950">❤️ Facebook Post Likes (per 1K: Rs 950)</option>
+                        <option value="tt_likes_premium" data-price-per-k="400">💖 TikTok Likes Premium (per 1K: Rs 400)</option>
+                        <option value="tt_likes_fast" data-price-per-k="350">⚡ TikTok Likes Fast Server (per 1K: Rs 350)</option>
+                        <option value="tt_views" data-price-per-k="100">👁️ TikTok Views (per 1K: Rs 100)</option>
+                        <option value="tt_followers_real" data-price-per-k="1400">👥 TikTok Followers Real (per 1K: Rs 1400)</option>
+                        <option value="tt_followers_hq" data-price-per-k="2300">💎 TikTok Followers High Quality (per 1K: Rs 2300)</option>
+                    </select></div>
+                    <div class="form-group"><label>Quantity (100 - 100,000) *</label><input type="number" id="boostQuantity" min="100" max="100000" step="1" value="1000" oninput="updatePricePreview()"></div>
+                    <div class="dynamic-price">💰 Total Price: <span id="dynamicPriceDisplay">Rs 0.00</span></div>
+                    <div class="form-group"><label>Target Link / Username *</label><input type="text" id="boostLink" required placeholder="YouTube/Facebook/TikTok URL or username"></div>
+                    <div class="form-group"><label>Your WhatsApp Number *</label><input type="tel" id="boostPhone" required placeholder="07XXXXXXXX"></div>
+                    <div class="form-group"><label>Payment Receipt Image *</label><input type="file" id="boostReceipt" accept="image/*" required></div>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-envelope"></i> Place Order (Auto Email)</button>
+                </form>
             </div>
-            <h2 style="letter-spacing: 1px; color: var(--accent);">🌍 DG PROGRAMMER 🌍</h2>
-            <br>
-            <p style="color: var(--text-secondary); line-height: 1.6; font-size: 1.05rem;">Passionate modder & developer. Providing premium unlocked APKs safely.</p>
-            <br>
-            <p style="opacity: 0.9;">The purpose of my website is to provide you with free, ads-free, and safe working mods. If you have any problems, you can leave a comment and share your thoughts. Share the website with your friends.</p>
-             <br>
-            <h3 style="color: var(--accent); font-size: 1.4rem;">Owner : Dasun Gimhana</h3>
+            <div class="card payment-card"><h3>💳 Payment Methods</h3><div class="payment-item"><div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Dialog_Axiata_logo.svg/200px-Dialog_Axiata_logo.svg.png" class="payment-logo"><div>🔰 EZ Cash: 0762664962</div></div><button class="copy-btn" onclick="copyText('0762664962')">Copy</button></div><div class="payment-item"><div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/People%27s_Bank_%28Sri_Lanka%29_logo.svg/200px-People%27s_Bank_%28Sri_Lanka%29_logo.svg.png" class="payment-logo"><div>People's Bank: 052200140105510</div></div><button class="copy-btn" onclick="copyText('052200140105510')">Copy</button></div><div class="payment-warning">⚠️ Upload receipt. For eZ Cash add extra LKR 20. Image will be auto-uploaded to our secure URL generator & order sent via email.</div></div>
+        </section>
 
-            <div class="social-buttons">
-                <a href="https://wa.me/+94783188906?text=_𝙝𝙮" class="social-btn wa" target="_blank">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                </a>
-                <a href="https://t.me/DasunTECH" class="social-btn tg" target="_blank">
-                    <i class="fab fa-telegram-plane"></i> Telegram
-                </a>
-                <a href="https://chat.whatsapp.com/If2IrHuqGzTDyMD9HuTMRt?mode=gi_t" class="social-btn gp" target="_blank">
-                    <i class="fas fa-users"></i> WhatsApp Group
-                </a>
+        <!-- V2RAY PAGE -->
+        <section id="v2ray" class="page">
+            <div class="card"><h1><i class="fas fa-shield-alt"></i> V2Ray VPN High Speed Data</h1><p><strong>📢 30 / 60 DAYS HIGH SPEED PAID V2RAY CONFIGS 🇱🇰</strong></p><p>💎 Ultra-Fast | 📞 WhatsApp Call Support | 📺 4K Streaming | 🎮 Low Ping</p></div>
+            <div class="operator-grid">
+                <div class="operator-card"><div class="operator-title"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Dialog_Axiata_logo.svg/200px-Dialog_Axiata_logo.svg.png" alt="Dialog"> Dialog (SIM)</div><ul class="package-list"><li><span class="package-name">Dialog Tiktok 297</span><span class="package-price">1 Week Unlimited</span></li><li><span class="package-name">Dialog Tiktok 997</span><span class="package-price">30 Days Unlimited</span></li><li><span class="package-name">Dialog Social 348</span><span class="package-price">30 Days / 20GB</span></li><li><span class="package-name">Dialog Social 1188</span><span class="package-price">30 Days Unlimited</span></li></ul></div>
+                <div class="operator-card"><div class="operator-title"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Dialog_Axiata_logo.svg/200px-Dialog_Axiata_logo.svg.png" alt="Dialog"> Dialog (ROUTER)</div><ul class="package-list"><li><span class="package-name">Dialog Router Zoom 298</span><span class="package-price">30 Days / 30GB</span></li><li><span class="package-name">Dialog Router Zoom 724</span><span class="package-price">30 Days Unlimited</span></li></ul></div>
+                <div class="operator-card"><div class="operator-title"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Airtel_2022.svg/200px-Airtel_2022.svg.png" alt="Airtel"> Airtel (SIM / Router)</div><ul class="package-list"><li><span class="package-name">Airtel Tiktok 297</span><span class="package-price">1 Week Unlimited</span></li><li><span class="package-name">Airtel Tiktok 997</span><span class="package-price">30 Days Unlimited</span></li><li><span class="package-name">Airtel Zoom</span><span class="package-price">30GB</span></li><li><span class="package-name">Airtel 135</span><span class="package-price">7 Days Unlimited</span></li><li><span class="package-name">Airtel YouTube 260</span><span class="package-price">30 Days Unlimited</span></li></ul></div>
+                <div class="operator-card"><div class="operator-title"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/Hutchison_Telecommunications_Sri_Lanka_Logo.svg/200px-Hutchison_Telecommunications_Sri_Lanka_Logo.svg.png" alt="Hutch"> Hutch (SIM / Router)</div><ul class="package-list"><li><span class="package-name">Hutch Zoom 224</span><span class="package-price">30GB / 30 Days</span></li></ul></div>
+                <div class="operator-card"><div class="operator-title"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/97/Mobitel_%28Sri_Lanka%29_logo.svg/200px-Mobitel_%28Sri_Lanka%29_logo.svg.png" alt="Mobitel"> Mobitel (SIM / Router)</div><ul class="package-list"><li><span class="package-name">Mobitel Zoom 222</span><span class="package-price">25GB / 30 Days (ALL IP)</span></li></ul></div>
+                <div class="operator-card"><div class="operator-title"><i class="fas fa-network-wired"></i> SLT Fiber & Zoom</div><ul class="package-list"><li><span class="package-name">SLT Fiber Netflix 1990</span><span class="package-price">30 Days Unlimited</span></li><li><span class="package-name">SLT Zoom Pack</span><span class="package-price">/195/ 490/ 235</span></li></ul></div>
             </div>
-        </div>
-    </div>
+            <div class="gb-card"><h3><i class="fas fa-database"></i> V2Ray Config - GB Plans</h3><div class="gb-options"><div class="gb-option">💾 100 GB<br><span style="font-size:22px;">Rs 450/=</span></div><div class="gb-option">💾 200 GB<br><span style="font-size:22px;">Rs 600/=</span></div><div class="gb-option">♾️ UNLIMITED<br><span style="font-size:22px;">Rs 750/=</span></div></div><div class="test-note">⚡ Test config available on request!</div></div>
+            <div class="card"><h2>📝 Order V2Ray Config</h2><form id="orderForm" onsubmit="submitV2RayOrder(event)"><div class="form-group"><label>Full Name *</label><input type="text" id="v2Name" required></div><div class="form-group"><label>Select Package *</label><select id="v2Package" required><option value="">-- Choose Package --</option><optgroup label="Dialog SIM"><option>Dialog Tiktok 297 - 1 Week Unlimited</option><option>Dialog Tiktok 997 - 30 Days Unlimited</option><option>Dialog Social 348 - 30 Days 20GB</option><option>Dialog Social 1188 - 30 Days Unlimited</option></optgroup><optgroup label="Dialog ROUTER"><option>Dialog Router Zoom 298 - 30 Days 30GB</option><option>Dialog Router Zoom 724 - 30 Days Unlimited</option></optgroup><optgroup label="Airtel"><option>Airtel Tiktok 297 - 1 Week Unlimited</option><option>Airtel Tiktok 997 - 30 Days Unlimited</option><option>Airtel Zoom - 30GB</option><option>Airtel 135 - 7 Days Unlimited</option><option>Airtel YouTube 260 - 30 Days Unlimited</option></optgroup><optgroup label="Hutch"><option>Hutch Zoom 224 - 30GB 30 Days</option></optgroup><optgroup label="Mobitel"><option>Mobitel Zoom 222 - 25GB 30 Days</option></optgroup><optgroup label="SLT"><option>SLT Fiber Netflix 1990 - 30 Days Unlimited</option><option>SLT Zoom Pack /195/490/235</option></optgroup></select></div><div class="form-group"><label>Select GB Plan (Optional but recommended)</label><select id="v2GbPlan"><option value="">-- None / Choose Data --</option><option>100 GB - Rs 450</option><option>200 GB - Rs 600</option><option>Unlimited - Rs 750</option></select></div><div class="form-group"><label>Phone Number *</label><input type="tel" id="v2Phone" required></div><div class="form-group"><label>Payment Receipt Image *</label><input type="file" id="v2Receipt" accept="image/*" required></div><button type="submit" class="btn btn-success"><i class="fas fa-envelope"></i> Place Order (Auto Email)</button></form></div>
+            <div class="card payment-card"><h3>💳 Payment Methods</h3><div class="payment-item"><div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Dialog_Axiata_logo.svg/200px-Dialog_Axiata_logo.svg.png" class="payment-logo"><div>EZ Cash: 0762664962</div></div><button class="copy-btn" onclick="copyText('0762664962')">Copy</button></div><div class="payment-item"><div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/People%27s_Bank_%28Sri_Lanka%29_logo.svg/200px-People%27s_Bank_%28Sri_Lanka%29_logo.svg.png" class="payment-logo"><div>People's Bank: 052200140105510</div></div><button class="copy-btn" onclick="copyText('052200140105510')">Copy</button></div><div class="payment-warning">⚠️ Upload receipt after payment. eZ Cash add LKR 20. Order details will be sent directly to admin email.</div></div>
+        </section>
 
-    <div id="accountPage" class="page">
-        <div id="accountContent"></div>
-    </div>
+        <section id="webdesign" class="page"><div class="card"><h1><i class="fas fa-code"></i> Professional Website Design</h1><p>Modern, responsive websites tailored for your business.</p><a href="https://wa.me/94783188906" class="wp-btn"><i class="fab fa-whatsapp"></i> Request a Quote →</a></div></section>
+        <section id="about" class="page"><div class="card"><h1><i class="fas fa-store"></i> About DG BUSINESS STORE</h1><p>Trusted digital service provider based in Sri Lanka.</p><a href="https://wa.me/94783188906" class="wp-btn"><i class="fab fa-whatsapp"></i> +94 78 318 8906</a></div></section>
+    </main>
 
-    <div id="authPage" class="page">
-        <div class="auth-container">
-            <div class="auth-tab">
-                <button id="authLoginTab" class="active-tab">🔐 LOGIN</button>
-                <button id="authSignupTab">✨ SIGN UP</button>
-            </div>
-            <div id="loginForm">
-                <input type="email" id="loginEmail" class="auth-input" placeholder="Email Address" autocomplete="email">
-                <input type="password" id="loginPassword" class="auth-input" placeholder="Password (min 8 chars, letters+numbers)">
-                <div id="loginError" class="error-msg"></div>
-                <button id="doLoginBtn" class="auth-btn">LOGIN <i class="fas fa-arrow-right"></i></button>
-            </div>
-            <div id="signupForm" style="display:none;">
-                <input type="text" id="signupUsername" class="auth-input" placeholder="Username">
-                <input type="email" id="signupEmail" class="auth-input" placeholder="Email">
-                <input type="password" id="signupPassword" class="auth-input" placeholder="Password (Letters + Numbers, min 8)">
-                <input type="password" id="signupConfirm" class="auth-input" placeholder="Confirm Password">
-                <div id="signupError" class="error-msg"></div>
-                <button id="doSignupBtn" class="auth-btn">CREATE ACCOUNT 🚀</button>
-            </div>
-            <div class="back-store">
-                <a href="#" onclick="switchPage('store'); return false;"><i class="fas fa-store"></i> Back to Store</a>
-            </div>
-        </div>
-    </div>
-    
-    <footer>© 2025 DG MODZ STORE — elevate your mod experience</footer>
-</div>
-<script src="script.js" ></script>
+    <script>
+        let currentUser = null;
+        window.addEventListener('load', () => { setTimeout(() => document.getElementById('loader').style.display = 'none', 1500); loadComments(); updatePricePreview(); });
+        function toggleTheme() { const html = document.documentElement; const current = html.getAttribute('data-theme'); const newTheme = current === 'dark' ? 'light' : 'dark'; html.setAttribute('data-theme', newTheme); localStorage.setItem('theme', newTheme); document.getElementById('themeBtn').textContent = newTheme === 'dark' ? '☀️' : '🌙'; }
+        const savedTheme = localStorage.getItem('theme') || 'light'; document.documentElement.setAttribute('data-theme', savedTheme); document.getElementById('themeBtn').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
+        document.getElementById('overlay').onclick = toggleMenu;
+        function showPage(pageId) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); document.getElementById(pageId).classList.add('active'); if(event && event.target) event.target.classList.add('active'); toggleMenu(); window.scrollTo(0,0); }
+        let slideIndex = 0; const slides = document.querySelectorAll('.carousel img'); if(slides.length) setInterval(() => { slides[slideIndex].classList.remove('active'); slideIndex = (slideIndex + 1) % slides.length; slides[slideIndex].classList.add('active'); }, 4000);
+        window.onload = function() { google.accounts.id.initialize({ client_id: "632556909730-ci1mdngs1jgla3fu7nj8jvfocmh84vcs.apps.googleusercontent.com", callback: handleCredentialResponse }); google.accounts.id.renderButton(document.getElementById("google-signin-btn"), { theme: "outline", size: "large", text: "signin_with" }); };
+        function handleCredentialResponse(response) { const data = parseJwt(response.credential); currentUser = { name: data.name, picture: data.picture, email: data.email }; document.getElementById('userInfo').innerHTML = `<img src="${data.picture}" width="34" style="border-radius:50%; border:2px solid var(--accent)">`; document.getElementById('google-signin-btn').style.display = 'none'; document.getElementById('commentBox').style.display = 'block'; loadComments(); }
+        function parseJwt(token) { return JSON.parse(atob(token.split('.')[1])); }
+        function postComment() { if (!currentUser) return alert('Please login with Google to comment.'); const text = document.getElementById('commentInput').value.trim(); if (!text) return; const comments = JSON.parse(localStorage.getItem('comments') || '[]'); comments.unshift({ id: Date.now(), user: currentUser, text: text, likes: 0, likedBy: [], replies: [], date: new Date().toLocaleString('en-US') }); localStorage.setItem('comments', JSON.stringify(comments)); document.getElementById('commentInput').value = ''; loadComments(); }
+        function loadComments() { const comments = JSON.parse(localStorage.getItem('comments') || '[]'); const html = comments.map(c => `<div class="comment"><div class="comment-header"><img src="${c.user.picture}"><div><strong>${escapeHtml(c.user.name)}</strong><br><small>${c.date}</small></div></div><p>${escapeHtml(c.text)}</p><div class="comment-actions"><button onclick="likeComment(${c.id})">👍 Like (${c.likes})</button><button onclick="replyComment(${c.id})">💬 Reply</button></div>${c.replies.map(r => `<div style="margin-left:40px; margin-top:12px; padding:10px; background:var(--bg); border-radius:12px;"><strong>${escapeHtml(r.user.name)}:</strong> ${escapeHtml(r.text)}</div>`).join('')}</div>`).join(''); document.getElementById('commentsList').innerHTML = html || '<p>✨ No comments yet.</p>'; }
+        function likeComment(id) { if (!currentUser) return alert('Login to like.'); const comments = JSON.parse(localStorage.getItem('comments') || '[]'); const comment = comments.find(c => c.id === id); if (comment && !comment.likedBy.includes(currentUser.email)) { comment.likes++; comment.likedBy.push(currentUser.email); localStorage.setItem('comments', JSON.stringify(comments)); loadComments(); } }
+        function replyComment(id) { if (!currentUser) return alert('Login to reply.'); const text = prompt('Write your reply:'); if (!text) return; const comments = JSON.parse(localStorage.getItem('comments') || '[]'); const comment = comments.find(c => c.id === id); if (comment) { comment.replies.push({ user: currentUser, text: text }); localStorage.setItem('comments', JSON.stringify(comments)); loadComments(); } }
+        function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+        function copyText(text) { navigator.clipboard.writeText(text).then(() => alert(`Copied: ${text}`)); }
+
+        // Dynamic price: linear scaling (pricePerK * quantity / 1000)
+        function updatePricePreview() {
+            const select = document.getElementById('boostServiceType');
+            const selectedOption = select.options[select.selectedIndex];
+            const pricePerK = parseFloat(selectedOption?.getAttribute('data-price-per-k') || 0);
+            let qty = parseInt(document.getElementById('boostQuantity').value) || 0;
+            if (isNaN(qty)) qty = 0;
+            if (qty < 100) qty = 100;
+            if (qty > 100000) qty = 100000;
+            const totalPrice = (pricePerK * qty) / 1000;
+            document.getElementById('dynamicPriceDisplay').innerText = `Rs ${totalPrice.toFixed(2)}`;
+            document.getElementById('boostQuantity').value = qty;
+        }
+
+        // Image upload to external URL generator
+        async function uploadImageToGenerator(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            try {
+                const response = await fetch('https://dg-privte-url-convate-site.vercel.app/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.url || data.imageUrl || null;
+                } else throw new Error('Upload failed');
+            } catch (err) {
+                console.warn("Upload error:", err);
+                return null;
+            }
+        }
+
+        // EMAIL SENDER via FormSubmit (sends directly to gimhanadasun367@gmail.com without leaving page)
+        async function sendEmailNotification(orderDetails, orderType) {
+            const endpoint = "https://formsubmit.co/ajax/gimhanadasun367@gmail.com";
+            let messageBody = "🔔 NEW ORDER RECEIVED 🔔\n\n";
+            messageBody += `📌 Order Type: ${orderType}\n`;
+            for (const [key, value] of Object.entries(orderDetails)) {
+                messageBody += `▪ ${key}: ${value}\n`;
+            }
+            const payload = {
+                _subject: `🛒 ${orderType} - DG STORE NEW ORDER`,
+                message: messageBody,
+                _captcha: 'false',
+                _template: 'table'
+            };
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    alert("✅ Order placed successfully! We'll contact you soon via WhatsApp/Email.");
+                    return true;
+                } else {
+                    alert("⚠️ Email delivery issue. Please save screenshot & contact +94783188906 manually.");
+                    return false;
+                }
+            } catch (err) {
+                console.error(err);
+                alert("❌ Network error. Please contact admin via WhatsApp: +94783188906");
+                return false;
+            }
+        }
+
+        // SOCIAL BOOST SUBMIT (Email only, no WhatsApp redirect)
+        async function submitBoostOrderDynamic(e) {
+            e.preventDefault();
+            const name = document.getElementById('boostName').value.trim();
+            const serviceSelect = document.getElementById('boostServiceType');
+            const serviceText = serviceSelect.options[serviceSelect.selectedIndex]?.text || '';
+            const qty = document.getElementById('boostQuantity').value;
+            const priceDisplay = document.getElementById('dynamicPriceDisplay').innerText;
+            const target = document.getElementById('boostLink').value.trim();
+            const phone = document.getElementById('boostPhone').value.trim();
+            const receiptFile = document.getElementById('boostReceipt').files[0];
+            if (!name || !serviceSelect.value || !target || !phone || !receiptFile) return alert('Please fill all required fields.');
+
+            let imageUrl = null;
+            if (receiptFile) imageUrl = await uploadImageToGenerator(receiptFile);
+            if (!imageUrl) imageUrl = "⚠️ Auto-upload failed, please forward receipt manually via WhatsApp";
+
+            const orderDetails = {
+                "Customer Name": name,
+                "Service": serviceText,
+                "Quantity": qty,
+                "Total Price": priceDisplay,
+                "Target Link": target,
+                "WhatsApp": phone,
+                "Receipt Image URL": imageUrl,
+                "Timestamp": new Date().toLocaleString()
+            };
+            const success = await sendEmailNotification(orderDetails, "SOCIAL MEDIA BOOST");
+            if (success) {
+                document.getElementById('boostOrderForm').reset();
+                updatePricePreview();
+                document.getElementById('boostReceipt').value = '';
+            }
+        }
+
+        // V2RAY ORDER SUBMIT (Email only)
+        async function submitV2RayOrder(e) {
+            e.preventDefault();
+            const name = document.getElementById('v2Name').value.trim();
+            const pkg = document.getElementById('v2Package').value;
+            const gbPlan = document.getElementById('v2GbPlan').value || "Not selected";
+            const phone = document.getElementById('v2Phone').value.trim();
+            const receiptFile = document.getElementById('v2Receipt').files[0];
+            if (!name || !pkg || !phone || !receiptFile) return alert('Please fill all required fields.');
+
+            let imageUrl = null;
+            if (receiptFile) imageUrl = await uploadImageToGenerator(receiptFile);
+            if (!imageUrl) imageUrl = "⚠️ Auto-upload failed, please forward receipt manually";
+
+            const orderDetails = {
+                "Customer Name": name,
+                "Package": pkg,
+                "GB Plan / Data": gbPlan,
+                "Phone Number": phone,
+                "Receipt Image URL": imageUrl,
+                "Timestamp": new Date().toLocaleString()
+            };
+            const success = await sendEmailNotification(orderDetails, "V2RAY VPN CONFIG");
+            if (success) {
+                document.getElementById('orderForm').reset();
+                document.getElementById('v2Receipt').value = '';
+            }
+        }
+    </script>
 </body>
 </html>
